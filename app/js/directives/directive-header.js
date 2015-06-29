@@ -65,6 +65,11 @@ angular.module('app').directive('shipyardHeader', ['lodash', '$rootScope', 'Pers
         $rootScope.showAbout = true;
       };
 
+      scope.textSizeChange = function(size) {
+        $rootScope.fontSize = size;
+        document.getElementById('main').style.fontSize = size + 'em';
+      };
+
       $rootScope.hideAbout = function() {
         $rootScope.showAbout = false;
       };

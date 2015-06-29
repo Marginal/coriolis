@@ -164,18 +164,18 @@ table.total {
   &.third {
     width: 33%;
 
-    .smallTablet({
-      .axis.x {
-        g.tick:nth-child(2n + 1) text {
-          display: none;
-        }
-      }
-    });
-
     .largePhone({
       width: 100% !important;
     });
   }
+
+  .smallTablet({
+    .axis.x {
+      g.tick:nth-child(2n + 1) text {
+        display: none;
+      }
+    }
+  });
 }
 
 .power-band {

@@ -43,6 +43,7 @@ function($rootScope, $location, $window, $doc, $state, CArr, shipPurpose, sz, hp
   $rootScope. discounts = { opts: Discounts };
   $rootScope.STATUS = ['', 'DISABLED', 'OFF', 'ON'];
   $rootScope.STATUS_CLASS = ['', 'disabled', 'warning', 'secondary-disabled'];
+  $rootScope.fontSize =  1;
   $rootScope.title = 'Coriolis';
 
   $rootScope.cName = function(c) {
