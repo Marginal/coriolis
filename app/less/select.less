@@ -1,14 +1,27 @@
 
 select {
-  border-radius: 0;
+  .border-radius(0);
+  cursor: pointer;
   background: none;
   color: @primary-disabled;
-  border: 1px solid @primary-disabled;
-  outline: none;
   font-family: @fStandard;
   font-size: 1em;
-}
+  background-color: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0.1em 0.5em;
+  outline:none;
+  border: 0;
 
+  &:focus {
+    outline:none;
+  }
+
+  &::-moz-focus-inner {
+    border: 0;
+  }
+}
 
 .select {
   color: @primary-disabled;
@@ -17,17 +30,34 @@ select {
   padding: 0.5em 0;
   width: 100%;
   margin: 0;
-  max-height: 300px;
+  max-height: 550px;
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 0;
   -webkit-overflow-scrolling: touch;
   background-color: @bg;
   border: 1px solid @primary;
-  white-space: nowrap;
   text-align: center;
 
+  .tablet({
+    max-height: 300px;
+  });
+
+  &::-webkit-scrollbar {
+    width: 0.5em;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-left: 1px solid @primary;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: @primary-disabled;
+  }
+
   .select-group {
+    white-space: nowrap;
     line-height: 1.5em;
     text-align: left;
     margin: 0.5em 0;
@@ -36,16 +66,20 @@ select {
     border-bottom: 1px solid @primary-disabled;
   }
 
-  .empty-c, .c, .lc {
-    cursor: pointer;
+  @optionSpacing: 2em;
 
+  .empty-c, .c, .lc {
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+    line-height:@optionSpacing;
     color: @primary-disabled;
-    stroke-width: 1em;
+    stroke-width: 0.5em;
     stroke: @primary-disabled;
 
     &:hover {
-      color: @warning;
-      stroke: @warning;
+      color: @primary;
+      stroke: @primary;
     }
     &.disabled {
       cursor: not-allowed;
@@ -58,30 +92,13 @@ select {
     }
   }
 
-  @optionSpacing: 2em;
-
-  .lc {
-    line-height:@optionSpacing;
-    text-align: left;
-  }
-
-  .empty-c {
-    line-height:@optionSpacing;
-    text-align: center;
-  }
-
-
-  .c {
+  .lc, .c {
     border:1px solid @primary-disabled;
-    display: inline-block;
-    padding: 0.1em;
+    padding: 0.1em 0.2em;
     margin: 0.3em;
-    width: 2em;
-    line-height: @optionSpacing;
-    text-align: center;
 
     &:hover {
-      border:1px solid @warning;
+      border:1px solid @primary;
     }
 
     &.disabled {
@@ -92,10 +109,19 @@ select {
     }
   }
 
+  .c {
+    display: inline-block;
+    width: 2em;
+  }
+
+  span {
+    vertical-align: middle;
+  }
+
   ul {
     display: inline-block;
     text-align: left;
-    min-width: 15em;
+    min-width: 16em;
     margin: 0 auto;
     padding: 0;
     list-style: none;
@@ -103,7 +129,7 @@ select {
 
   &.hardpoint {
     .c {
-      width: 4.4em;
+      width: 4.5em;
       padding: 0.1em 0.2em;
     }
     ul {

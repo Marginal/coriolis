@@ -59,7 +59,7 @@
   input {
     background: none;
     line-height: 1.3em;
-    width: 20em;
+    width: 15em;
     font-size: 0.9em;
     box-sizing: border-box;
     display: inline-block;
@@ -72,7 +72,7 @@
     }
 
     .largePhone({
-      width: 70%;
+      width: 60%;
     });
 
     .medPhone({
@@ -99,6 +99,12 @@
   text-overflow: ellipsis;
 }
 
+.optional-hide {
+  .largePhone({
+    display: none;
+  });
+}
+
 table.total {
   width: 100%;
 
@@ -113,6 +119,26 @@ table.total {
   }
 }
 
+.tabs {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1px;
+
+  &, th {
+    border-collapse: collapse;
+    color: @primary-disabled;
+    background-color: @primary-bg;
+    border: 1px solid @primary-disabled;
+    padding-top: 1px;
+  }
+
+  .active {
+    color: @primary-bg;
+    background-color: @primary-disabled;
+  }
+
+}
+
 .group {
   width: 25%;
   padding: 0.5em 0.2em;
@@ -121,11 +147,6 @@ table.total {
   display: inline-block;
   .user-select-none();
   cursor: default;
-
-  [ng-click] {
-    cursor: pointer;
-  }
-
 
   h1 {
     font-family: @fStandard;
@@ -141,6 +162,12 @@ table.total {
 
   .smallTablet({
     width: 50%;
+
+    .axis.x {
+      g.tick:nth-child(2n + 1) text {
+        display: none;
+      }
+    }
   });
 
   .largePhone({
@@ -227,9 +254,6 @@ table.total {
       }
       &:nth-child(3) {
         display: none;
-      }
-      &:nth-child(2) {
-        font-size: 0.7em;
       }
     }
   });

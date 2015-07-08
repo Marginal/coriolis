@@ -8,7 +8,7 @@ angular.module('app').directive('componentSelect', function() {
       var o = opts[i];
       var id = o.id || (o.class + o.rating);  // Common components' ID is their class and rating
 
-      if (i > 0 && opts.length > 3 && o.class != prevClass && (!o.grp || o.rating != prevRating || o.mode)) {
+      if (i > 0 && opts.length > 4 && o.class != prevClass && (o.rating != prevRating || o.mode)) {
         list.push('<br/>');
       }
 
@@ -21,10 +21,10 @@ angular.module('app').directive('componentSelect', function() {
       list.push((o.maxmass && mass > o.maxmass) ? ' disabled"' : '" cpid="', id, '">');
 
       if (o.mode) {
-        list.push('<svg cpid="', id, '" class="icon lg"><use xlink:href="#mount-', o.mode, '"></use></svg> ');
+        list.push('<svg cpid="', id, '" class="icon lg"><use cpid="', id, '" xlink:href="#mount-', o.mode, '"></use></svg> ');
       }
 
-      list.push(o.class, o.rating);
+      list.push('<span cpid="', id, '">', o.class, o.rating);
 
       if (o.missile) {
         list.push('/' + o.missile);
@@ -35,7 +35,7 @@ angular.module('app').directive('componentSelect', function() {
         list.push(' ' + o.name);
       }
 
-      list.push('</li>');
+      list.push('</span></li>');
       prevClass = o.class;
       prevRating = o.rating;
     }
