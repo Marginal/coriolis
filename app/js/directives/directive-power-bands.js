@@ -19,27 +19,29 @@ angular.module('app').directive('powerBands', ['$window', function($window) {
           pctAxis = d3.svg.axis().scale(pctScale).outerTickSize(0).orient('bottom').tickFormat(d3.format('%')),
           // Create chart
           svg = d3.select(element[0]).append('svg'),
-          vis = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'),
+          vis = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
           deployed = vis.append('g').attr('class', 'power-band'),
           retracted = vis.append('g').attr('class', 'power-band');
 
       svg.on('contextmenu', function() {
+        if (!d3.event.shiftKey) {
           d3.event.preventDefault();
           for (var i = 0, l = bands.length; i < l; i++) {
             bands[i].retSelected = false;
             bands[i].depSelected = false;
           }
           render();
-        });
+        }
+      });
 
       // Create Y Axis SVG Elements
       vis.append('g').attr('class', 'watt axis');
       vis.append('g').attr('class', 'pct axis');
-      vis.append('text').attr('x', -35).attr('y', 16).attr('class', 'primary').text('RET');
-      vis.append('text').attr('x', -35).attr('y', barHeight + 18).attr('class', 'primary').text('DEP');
+      vis.append('text').attr('x', -5).style('text-anchor','end').attr('dy', '0.5em').attr('y', barHeight / 2).attr('class', 'primary').text('RET');
+      vis.append('text').attr('x', -5).style('text-anchor','end').attr('dy', '0.5em').attr('y', (barHeight * 1.5) + 1).attr('class', 'primary').text('DEP');
 
-      var retLbl = vis.append('text').attr('y', 16);
-      var depLbl = vis.append('text').attr('y', barHeight + 18);
+      var retLbl = vis.append('text').attr('dy', '0.5em').attr('y', barHeight / 2)
+      var depLbl = vis.append('text').attr('dy', '0.5em').attr('y', (barHeight * 1.5) + 1)
 
       // Watch for changes to data and events
       scope.$watchCollection('available', render);
