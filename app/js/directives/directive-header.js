@@ -1,4 +1,4 @@
-angular.module('app').directive('shipyardHeader', ['lodash', '$rootScope', 'Persist', 'ShipsDB', function(_, $rootScope, Persist, ships) {
+angular.module('app').directive('shipyardHeader', ['lodash', '$window', '$rootScope', 'Persist', 'ShipsDB', function(_, $window, $rootScope, Persist, ships) {
 
   return {
     restrict: 'E',
@@ -12,6 +12,7 @@ angular.module('app').directive('shipyardHeader', ['lodash', '$rootScope', 'Pers
       scope.allComparisons = Persist.comparisons;
       scope.bs = Persist.state;
 
+      var win = angular.element($window);   // Angularized window object for event triggering
       var insIndex = _.findIndex($rootScope.insurance.opts, 'name', Persist.getInsurance());
       var savedDiscounts = Persist.getDiscount() || [1, 1];
       $rootScope.insurance.current = $rootScope.insurance.opts[insIndex != -1 ? insIndex : 0];
@@ -66,10 +67,9 @@ angular.module('app').directive('shipyardHeader', ['lodash', '$rootScope', 'Pers
       };
 
       scope.textSizeChange = function(size) {
-        $rootScope.fontSize = size;
-        $rootScope.fontSizePx = size * parseFloat(getComputedStyle(document.documentElement).fontSize);
+        $rootScope.sizeRatio = size;
         document.getElementById('main').style.fontSize = size + 'em';
-        $rootScope.$broadcast('render');
+        win.triggerHandler('resize');
       };
 
       $rootScope.hideAbout = function() {
