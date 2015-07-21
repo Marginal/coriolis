@@ -1,4 +1,4 @@
-angular.module('app').directive('shipyardHeader', ['lodash', '$window', '$rootScope', 'Persist', 'ShipsDB', function(_, $window, $rootScope, Persist, ships) {
+angular.module('app').directive('shipyardHeader', ['lodash', '$rootScope', '$state', 'Persist', 'Serializer', 'ShipsDB', function(_, $rootScope, $state, Persist, Serializer, ships) {
 
   return {
     restrict: 'E',
@@ -19,17 +19,6 @@ angular.module('app').directive('shipyardHeader', ['lodash', '$window', '$rootSc
       $rootScope.discounts.ship = savedDiscounts[0];
       $rootScope.discounts.components = savedDiscounts[1];
 
-      // Close menus if a navigation change event occurs
-      $rootScope.$on('$stateChangeStart', function() {
-        scope.openedMenu = null;
-      });
-
-      // Listen to close event to close opened menus or modals
-      $rootScope.$on('close', function() {
-        scope.openedMenu = null;
-        $rootScope.showAbout = false;
-      });
-
       /**
        * Save selected insurance option
        */
@@ -43,6 +32,28 @@ angular.module('app').directive('shipyardHeader', ['lodash', '$window', '$rootSc
       scope.updateDiscount = function() {
         Persist.setDiscount([$rootScope.discounts.ship, $rootScope.discounts.components]);
         $rootScope.$broadcast('discountChange');
+      };
+
+      scope.backup = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        scope.openedMenu = null;
+        $state.go('modal.export', {
+          title: 'Backup',
+          data: Persist.getAll(),
+          description: 'Backup of all Coriolis data to save or transfer to another browser/device'
+        });
+      };
+
+      scope.detailedExport = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        scope.openedMenu = null;
+        $state.go('modal.export', {
+          title: 'Detailed Export',
+          data: Serializer.toDetailedExport(scope.allBuilds),
+          description: 'Detailed export of all builds for use with other tools and sites'
+        });
       };
 
       scope.openMenu = function(e, menu) {
@@ -59,12 +70,10 @@ angular.module('app').directive('shipyardHeader', ['lodash', '$window', '$rootSc
         scope.openedMenu = menu;
       };
 
-      scope.about = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+      // Close menus if a navigation change event occurs
+      $rootScope.$on('$stateChangeStart', function() {
         scope.openedMenu = null;
-        $rootScope.showAbout = true;
-      };
+      });
 
       scope.textSizeChange = function(size) {
         $rootScope.sizeRatio = size;
@@ -72,9 +81,10 @@ angular.module('app').directive('shipyardHeader', ['lodash', '$window', '$rootSc
         win.triggerHandler('resize');
       };
 
-      $rootScope.hideAbout = function() {
-        $rootScope.showAbout = false;
-      };
+      // Listen to close event to close opened menus or modals
+      $rootScope.$on('close', function() {
+        scope.openedMenu = null;
+      });
 
       scope.$watchCollection('allBuilds', function() {
         scope.buildsList = Object.keys(scope.allBuilds).sort();

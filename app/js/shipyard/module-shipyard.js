@@ -10,6 +10,13 @@ angular.module('shipyard', ['ngLodash'])
   // Create 'angularized' references to DB.This will aid testing
   .constant('ShipsDB', DB.ships)
   .constant('ComponentsDB', DB.components)
+  .value('ArmourMultiplier', [
+    1,      // Lightweight
+    1.4,    // Reinforced
+    1.945,  // Military
+    1.945,  // Mirrored
+    1.945   // Reactive
+  ])
   .value('commonArray', [
     'Power Plant',
     'Thrusters',
@@ -32,7 +39,7 @@ angular.module('shipyard', ['ngLodash'])
 
     // Internal
     fs: 'Fuel Scoop',
-    sc: 'Scanners',
+    sc: 'Scanner',
     am: 'Auto Field-Maintenance Unit',
     cr: 'Cargo Rack',
     fi: 'FSD Interdictor',
@@ -66,12 +73,13 @@ angular.module('shipyard', ['ngLodash'])
     sb: 'Shield Booster',
     tp: 'Torpedo Pylon'
   })
-  .value('shipPurpose', {
-    mp: 'Multi Purpose',
-    fr: 'Freighter',
-    ex: 'Explorer',
-    co: 'Combat',
-    pa: 'Passenger Transport'
+  .value('MountMap', {
+    'F': 'Fixed',
+    'G': 'Gimballed',
+    'T': 'Turret',
+    'Fixed': 'F',
+    'Gimballed': 'G',
+    'Turret': 'T'
   })
   .value('shipSize', [
     'N/A',
@@ -109,7 +117,7 @@ angular.module('shipyard', ['ngLodash'])
     },
     {                   // 2
       title: 'Armour',
-      props: ['armourTotal'],
+      props: ['armour'],
       unit: '',
       fmt: 'fCrd'
     },
@@ -207,13 +215,13 @@ angular.module('shipyard', ['ngLodash'])
    */
   .value('calcTotalRange', function(mass, fsd, fuel) {
     var fuelRemaining = fuel % fsd.maxfuel;  // Fuel left after making N max jumps
-    var jumps = fuel / fsd.maxfuel;
+    var jumps = Math.floor(fuel / fsd.maxfuel);
     mass += fuelRemaining;
     // Going backwards, start with the last jump using the remaining fuel
     var totalRange = fuelRemaining > 0 ? Math.pow(fuelRemaining / fsd.fuelmul, 1 / fsd.fuelpower ) * fsd.optmass / mass : 0;
-    // For each max fuel jump, calculate the max jump range based on fuel left in the tank
-    for (var j = 0, l = Math.floor(jumps); j < l; j++) {
-      fuelRemaining += fsd.maxfuel;
+    // For each max fuel jump, calculate the max jump range based on fuel mass left in the tank
+    for (var j = 0; j < jumps; j++) {
+      mass += fsd.maxfuel;
       totalRange += Math.pow(fsd.maxfuel / fsd.fuelmul, 1 / fsd.fuelpower ) * fsd.optmass / mass;
     }
     return totalRange;

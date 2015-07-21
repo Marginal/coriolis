@@ -212,6 +212,21 @@ angular.module('app').controller('OutfitController', ['$window', '$rootScope', '
   };
 
   /**
+   * Export the build to detailed JSON
+   */
+  $scope.exportBuild = function(e) {
+    e.stopPropagation();
+
+    if ($scope.buildName) {
+      $state.go('modal.export', {
+        title: $scope.buildName + ' Export',
+        description: 'A detailed JSON export of your build for use in other sites and tools',
+        data: Serializer.toDetailedBuild($scope.buildName, ship, $scope.code || Serializer.fromShip(ship))
+      });
+    }
+  };
+
+  /**
    * Permanently delete the current build and redirect/reload this controller
    * with the 'factory' build of the current ship.
    */
@@ -354,6 +369,10 @@ angular.module('app').controller('OutfitController', ['$window', '$rootScope', '
   $scope.updateCostTab = function(tab) {
     Persist.setCostTab(tab);
     $scope.costTab = tab;
+  };
+
+  $scope.pdWarning = function(pd) {
+    return pd.enginecapacity < ship.boostEnergy;
   };
 
   // Hide any open menu/slot/etc if the background is clicked

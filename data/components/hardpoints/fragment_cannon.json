@@ -1,5 +1,5 @@
 {
-  "Fragment Cannons": [
+  "Fragment Cannon": [
     {
       "id": "1t",
       "grp": "fc",
@@ -183,7 +183,7 @@
       "name": "Pacifier",
       "class": 3,
       "rating": "C",
-      "cost": 182400,
+      "cost": 1400832,
       "mass": 8,
       "power": 1.02,
       "mode": "F",

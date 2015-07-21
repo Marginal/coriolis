@@ -32,6 +32,41 @@ angular.module('shipyard').service('Components', ['lodash', 'ComponentsDB', 'Shi
     return null;
   };
 
+  this.findInternalId = function(groupName, clss, rating, name) {
+    var group = C.internal[groupName];
+
+    if (!group) {
+      throw 'Invalid internal group: ' + groupName;
+    }
+
+    for (var i = 0, l = group.length; i < l; i++) {
+      if (group[i].class == clss && group[i].rating == rating && ((!name && !group[i].name) || group[i].name == name)) {
+        return group[i].id;
+      }
+    }
+
+    return 0;
+  };
+
+  this.findHardpointId = function(groupName, clss, rating, name, mode, missile) {
+    var group = C.hardpoints[groupName];
+
+    if (!group) {
+      throw 'Invalid hardpoint group: ' + groupName;
+    }
+
+    for (var i = 0, l = group.length; i < l; i++) {
+      if (group[i].class == clss && group[i].rating == rating && group[i].mode == mode
+          && ((!name && !group[i].name) || group[i].name == name)
+          && ((!missile && !group[i].missile) || group[i].missile == missile)
+          ) {
+        return group[i].id;
+      }
+    }
+
+    return 0;
+  };
+
   /**
    * Looks up the bulkhead component for a specific ship and bulkhead
    * @param  {string} shipId       Unique ship Id/Key
@@ -40,6 +75,10 @@ angular.module('shipyard').service('Components', ['lodash', 'ComponentsDB', 'Shi
    */
   this.bulkheads = function(shipId, bulkheadsId) {
     return C.bulkheads[shipId][bulkheadsId];
+  };
+
+  this.bulkheadIndex = function(bulkheadName) {
+    return ['Lightweight Alloy', 'Reinforced Alloy', 'Military Grade Composite', 'Mirrored Surface Composite', 'Reactive Surface Composite'].indexOf(bulkheadName);
   };
 
   /**
@@ -51,7 +90,8 @@ angular.module('shipyard').service('Components', ['lodash', 'ComponentsDB', 'Shi
    */
   this.forShip = function(shipId) {
     var ship = Ships[shipId];
-    return new ComponentSet(C, ship.properties.mass + 5, ship.slots.common, ship.slots.internal[0], ship.slots.hardpoints[0]);
+    var maxInternal = isNaN(ship.slots.internal[0]) ? ship.slots.internal[0].class : ship.slots.internal[0];
+    return new ComponentSet(C, ship.minMassFilter || ship.properties.hullMass + 5, ship.slots.common, maxInternal, ship.slots.hardpoints[0]);
   };
 
 }]);

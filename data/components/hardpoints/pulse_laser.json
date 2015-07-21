@@ -1,5 +1,5 @@
 {
-  "Pulse Lasers": [
+  "Pulse Laser": [
     {
       "id": "1d",
       "grp": "pl",
@@ -177,7 +177,7 @@
       "name": "Distruptor",
       "class": 2,
       "rating": "E",
-      "cost": 26000,
+      "cost": 26400,
       "mass": 4,
       "power": 0.7,
       "mode": "F",
