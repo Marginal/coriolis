@@ -42,7 +42,7 @@ function($rootScope, $location, $window, $doc, $state, CArr, sz, hpc, GroupMap, 
   $rootScope. discounts = { opts: Discounts };
   $rootScope.STATUS = ['', 'DISABLED', 'OFF', 'ON'];
   $rootScope.STATUS_CLASS = ['', 'disabled', 'warning', 'secondary-disabled'];
-  $rootScope.sizeRatio =  1;
+  $rootScope.sizeRatio = Persist.getSizeRatio();
   $rootScope.title = 'Coriolis';
 
   /**

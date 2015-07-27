@@ -40,8 +40,8 @@ angular.module('app').directive('powerBands', ['$window', '$rootScope', function
       // Create Y Axis SVG Elements
       vis.append('g').attr('class', 'watt axis');
       vis.append('g').attr('class', 'pct axis');
-      var repText = vis.append('text').attr('x', -5).style('text-anchor','end').attr('dy', '0.5em').attr('class', 'primary').text('RET');
-      var depText = vis.append('text').attr('x', -5).style('text-anchor','end').attr('dy', '0.5em').attr('class', 'primary').text('DEP');
+      var repText = vis.append('text').attr('x', -5).style('text-anchor', 'end').attr('dy', '0.5em').attr('class', 'primary').text('RET');
+      var depText = vis.append('text').attr('x', -5).style('text-anchor', 'end').attr('dy', '0.5em').attr('class', 'primary').text('DEP');
       var retLbl = vis.append('text').attr('dy', '0.5em');
       var depLbl = vis.append('text').attr('dy', '0.5em');
 
@@ -75,7 +75,7 @@ angular.module('app').directive('powerBands', ['$window', '$rootScope', function
       }
 
       function render() {
-        var size = $rootScope.sizeRatio;
+        var size = $rootScope.sizeRatio,
             mTop = Math.round(25 * size),
             mRight = Math.round(130 * size),
             mBottom = Math.round(25 * size),
@@ -158,16 +158,16 @@ angular.module('app').directive('powerBands', ['$window', '$rootScope', function
 
       }
 
-      function updateLabel(lbl, width, y, selected, sum, available) {
+      function updateLabel(lbl, width, y, selected, sum, avail) {
         lbl
           .attr('x', width + 5 )
           .attr('y', y)
-          .attr('class', getClass(selected, sum, available))
-          .text(wattFmt(Math.max(0, sum)) + ' (' + pctFmt(Math.max(0, sum / available)) + ')');
+          .attr('class', getClass(selected, sum, avail))
+          .text(wattFmt(Math.max(0, sum)) + ' (' + pctFmt(Math.max(0, sum / avail)) + ')');
       }
 
-      function getClass(selected, sum, available) {
-        return selected ? 'secondary' : (sum > available) ? 'warning' : 'primary';
+      function getClass(selected, sum, avail) {
+        return selected ? 'secondary' : (sum > avail) ? 'warning' : 'primary';
       }
 
       function bandText(val, index) {
